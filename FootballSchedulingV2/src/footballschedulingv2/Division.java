@@ -1,13 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
-/**
- *
- * @author Steven
- */
+package footballschedulingv2;
 public class Division {
     private String divisionName;
     private Team[] schedule;
@@ -22,7 +14,25 @@ public class Division {
         this.highestCycle = 0;
         this.divisionName = name;
     }
-
+    public Division(Division d){
+        divisionName = d.divisionName;
+        schedule = new Team[d.schedule.length];
+        for(int i=0; i<d.schedule.length;i++){
+            schedule[i] = new Team(d.schedule[i]);
+        }
+        cycles = new Cycle[d.cycles.length]; 
+        for(int i=0;i<d.cycles.length;i++){
+            cycles[i]= new Cycle(d.cycles[i]);
+        }
+        distances = new double[d.distances.length][d.distances[0].length];
+        for(int i=0;i<d.distances.length;i++){
+            for(int j=0;j<d.distances[i].length;j++){
+                distances[i][j] = d.distances[i][j];
+            }
+        }
+        highestCycle = d.highestCycle;
+    }
+    
     /**
      * @return the schedule
      */
@@ -92,4 +102,5 @@ public class Division {
     public void setDivisionName(String divisionName) {
         this.divisionName = divisionName;
     }
+    
 }

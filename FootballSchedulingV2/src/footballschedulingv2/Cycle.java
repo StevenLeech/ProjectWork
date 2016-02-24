@@ -1,4 +1,9 @@
-
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package footballschedulingv2;
 import java.util.ArrayList;
 
 /*
@@ -21,6 +26,15 @@ public class Cycle {
         this.teams = new ArrayList<Team>();
         
     }
+    public Cycle(Cycle c){
+        cycleId = c.cycleId;
+        teams = new ArrayList<>();
+        for(int i=0;i<c.teams.size();i++){
+            Team team = new Team(c.teams.get(i));
+            teams.add(team);
+        }
+    }
+    
 
     /**
      * @return the cycleId

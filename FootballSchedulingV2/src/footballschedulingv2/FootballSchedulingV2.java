@@ -188,7 +188,7 @@ public class FootballSchedulingV2 {
         Problem problem = new Problem(divisions);
         RandGen rgen = new RandGen(500.0);
         rgen.setSeed(500.0);
-        SA mysa = new SA(problem, rgen, 75, 50, 2000, 0.9, 0.01, 1e-6, 1e10, -50);
+        SA mysa = new SA(problem, rgen, 400, 200, 30000, 0.95, 0.01, 1e-6, 1e10, -50);
         mysa.simulation();
         
     }

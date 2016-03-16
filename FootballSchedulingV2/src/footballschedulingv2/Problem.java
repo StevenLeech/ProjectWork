@@ -17,6 +17,16 @@ public class Problem {
     int currentCycle;
     private Fixture[] boxingDay = new Fixture[46];
     private Fixture[] newYearsDay = new Fixture[46];
+    int boxingDayClashes = 0;
+    int boxingDayLondon = 0;
+    int boxingDayManchester = 0;
+    int bdPremLondon = 0;
+    int newYearsDayClashes = 0;
+    int newYearsDayLondon = 0;
+    int newYearsDayManchester = 0;
+    int nyPremLondon = 0;
+    ArrayList<String> bdHomeTeamStrings;
+    ArrayList<String> nyHomeTeamStrings;
 
     public Problem(Division[] divisions) {
         this.divisions = divisions;
@@ -35,21 +45,37 @@ public class Problem {
         bestCost = p.bestCost;
         adjustedCost = p.adjustedCost;
         currentCycle = p.currentCycle;
-        boxingDay = new Fixture[46];
+        /*boxingDay = new Fixture[46];
         newYearsDay = new Fixture[46];
         for (int i = 0; i < p.boxingDay.length; i++) {
             boxingDay[i] = new Fixture(p.boxingDay[i]);
         }
         for (int i = 0; i < p.newYearsDay.length; i++) {
             newYearsDay[i] = new Fixture(p.newYearsDay[i]);
+        }*/setFixtures();
+        boxingDayClashes = p.boxingDayClashes;
+        boxingDayLondon = p.boxingDayLondon;
+        boxingDayManchester = p.boxingDayManchester;
+        bdPremLondon = p.bdPremLondon;
+        newYearsDayClashes = p.newYearsDayClashes;
+        newYearsDayLondon = p.newYearsDayLondon;
+        newYearsDayManchester = p.newYearsDayManchester;
+        nyPremLondon = p.nyPremLondon;
+        bdHomeTeamStrings = new ArrayList<String>();
+        nyHomeTeamStrings = new ArrayList<String>();
+        for(int i=0;i<p.bdHomeTeamStrings.size();i++){
+            bdHomeTeamStrings.add(p.bdHomeTeamStrings.get(i));
+            nyHomeTeamStrings.add(p.nyHomeTeamStrings.get(i));
         }
+        
     }
-    
+
     public void setFixtures() {
         int fixture = 0;
         for (int i = 0; i < divisions.length; i++) {
             Cycle[] cycles = divisions[i].getCycles();
             Team[] schedule = divisions[i].getSchedule();
+            double[][] distances = divisions[i].getDistances();
             for (int j = 0; j < cycles.length; j++) {
                 Cycle cycle = cycles[j];
                 ArrayList<Team> teams = cycle.getTeams();
@@ -59,6 +85,8 @@ public class Problem {
                     for (int k = 0; k < teams.size() / 2; k++) {
                         Team awayTeam = schedule[homeTeam.getNextTeam()];
                         boxingDay[fixture] = new Fixture(homeTeam, awayTeam);
+                        double distance = distances[homeTeam.getTeamID()][awayTeam.getTeamID()];
+                        boxingDay[fixture].setDistance(distance);
                         fixture++;
                         homeTeam = schedule[awayTeam.getNextTeam()];
                     }
@@ -69,6 +97,7 @@ public class Problem {
         for (int i = 0; i < divisions.length; i++) {
             Cycle[] cycles = divisions[i].getCycles();
             Team[] schedule = divisions[i].getSchedule();
+            double[][] distances = divisions[i].getDistances();
             for (int j = 0; j < cycles.length; j++) {
                 Cycle cycle = cycles[j];
                 ArrayList<Team> teams = cycle.getTeams();
@@ -78,6 +107,8 @@ public class Problem {
                     for (int k = 0; k < teams.size() / 2; k++) {
                         Team awayTeam = schedule[homeTeam.getNextTeam()];
                         newYearsDay[fixture] = new Fixture(homeTeam, awayTeam);
+                        double distance = distances[homeTeam.getTeamID()][awayTeam.getTeamID()];
+                        newYearsDay[fixture].setDistance(distance);
                         fixture++;
                         homeTeam = schedule[awayTeam.getNextTeam()];
                     }
@@ -94,7 +125,7 @@ public class Problem {
         Cycle[] cycles = division.getCycles();
         int selectTeam = rand.nextInt(teams.length);
         Team team1 = teams[selectTeam];
-        int selectMove = rand.nextInt(3);
+        int selectMove = rand.nextInt(5);
         int highestCycle = division.getHighestCycle();
         int team1Cycle = team1.getCycle();
         Team team2 = new Team();
@@ -113,9 +144,22 @@ public class Problem {
                 }
                 int selectCycle = rand.nextInt(otherCycles.size());
                 Cycle otherCycle = otherCycles.get(selectCycle);
-                selectTeam2 = rand.nextInt(otherCycle.getCycleSize());
-                team2 = otherCycle.getTeams().get(selectTeam2);
-                merge(team1, team2, division);
+                int i = 0;
+                boolean feasible = false;
+                boolean possible = true;
+                while (feasible == false) {
+                    i++;
+                    selectTeam2 = rand.nextInt(otherCycle.getCycleSize());
+                    team2 = otherCycle.getTeams().get(selectTeam2);
+                    feasible = isMergeFeasible(team1, team2);
+                    if (i == 10) {
+                        feasible = true;
+                        possible = false;
+                    }
+                }
+                if (possible == true) {
+                    merge(team1, team2, division);
+                }
             }
         }
         if (selectMove == 1) { //split Cycle
@@ -140,33 +184,51 @@ public class Problem {
         }
         if (selectMove == 2) {//rearrange cycle
             Cycle cycle = cycles[team1Cycle];
-
+            int i=0;
             boolean feasible = false;
+            boolean possible = true;
             while (feasible == false) {
+                i++;
                 selectTeam2 = rand.nextInt(cycle.getCycleSize());
                 team2 = cycle.getTeams().get(selectTeam2);
                 feasible = isRearrangeFeasible(team1, team2, division);
+                 if (i == 10) {
+                    feasible = true;
+                    possible = false;
+                }
             }
-            rearrange(team1, team2, division);
+            if (possible == true) {
+                rearrange(team1, team2, division);
+            }
+        }
+        if (selectMove == 3) {
+            Cycle cycle = cycles[team1Cycle];
+            reverseCycle(cycle, division);
+        }
+        if (selectMove == 4) {
+            Cycle cycle = cycles[team1Cycle];
+            adjustDates(cycle, division);
         }
         setFixtures();
         getCost();
         return adjustedCost;
     }
 
+    public double returnCost() {
+        return this.cost;
+    }
+
     public double getCost() {
         double total = 0.0;
         double penalty = 0.0;
-        int boxingDayClashes = 0;
-        int boxingDayLondon = 0;
-        int boxingDayManchester = 0;
-        int bdPremManchester = 0;
-        int bdPremLondon = 0;
-        int newYearsDayClashes = 0;
-        int newYearsDayLondon = 0;
-        int newYearsDayManchester = 0;
-        int nyPremLondon = 0;
-        int nyPremManchester = 0;
+        boxingDayClashes = 0;
+        boxingDayLondon = 0;
+        boxingDayManchester = 0;
+        bdPremLondon = 0;
+        newYearsDayClashes = 0;
+        newYearsDayLondon = 0;
+        newYearsDayManchester = 0;
+        nyPremLondon = 0;
         for (int j = 0; j < divisions.length; j++) {
             Division division = divisions[j];
             Team[] schedule = division.getSchedule();
@@ -177,9 +239,9 @@ public class Problem {
             }
         }
         ArrayList<Team> boxingDayHomeTeams = new ArrayList<Team>();
-        ArrayList<String> bdHomeTeamStrings = new ArrayList<String>();
+        bdHomeTeamStrings = new ArrayList<String>();
         ArrayList<Team> newYearsDayHomeTeams = new ArrayList<Team>();
-        ArrayList<String> nyHomeTeamStrings = new ArrayList<String>();
+        nyHomeTeamStrings = new ArrayList<String>();
 
         for (int i = 0; i < boxingDay.length; i++) {
             Team team = boxingDay[i].getHomeTeam();
@@ -198,9 +260,6 @@ public class Problem {
             for (int j = 0; j < pairs.size(); j++) {
                 if (bdHomeTeamStrings.contains(pairs.get(j))) {
                     boxingDayClashes++;
-                    int item = bdHomeTeamStrings.indexOf(pairs.get(j));
-                    bdHomeTeamStrings.remove(pairs.get(j));
-                    boxingDayHomeTeams.remove(item);
                 }
             }
             if (team.getLocation() == 0) {
@@ -210,9 +269,6 @@ public class Problem {
                 }
             } else if (team.getLocation() == 1) {
                 boxingDayManchester++;
-                if (team.getDivision() == 0) {
-                    bdPremManchester++;
-                }
             }
         }
         for (int i = 0; i < newYearsDayHomeTeams.size(); i++) {
@@ -221,9 +277,6 @@ public class Problem {
             for (int j = 0; j < pairs.size(); j++) {
                 if (nyHomeTeamStrings.contains(pairs.get(j))) {
                     newYearsDayClashes++;
-                    int item = nyHomeTeamStrings.indexOf(pairs.get(j));
-                    nyHomeTeamStrings.remove(pairs.get(j));
-                    newYearsDayHomeTeams.remove(item);
                 }
             }
             if (team.getLocation() == 0) {
@@ -233,16 +286,38 @@ public class Problem {
                 }
             } else if (team.getLocation() == 1) {
                 newYearsDayManchester++;
-                if (team.getDivision() == 0) {
-                    nyPremManchester++;
-                }
             }
         }
-
+        double averageCost = total / 92;
+        if (boxingDayClashes > 10) {
+            penalty += averageCost * (boxingDayClashes - 10);
+        }
+        if (newYearsDayClashes > 10) {
+            penalty += averageCost * (newYearsDayClashes - 10);
+        }
+        if (boxingDayLondon > 6) {
+            penalty += averageCost * (boxingDayLondon - 6);
+        }
+        if (newYearsDayLondon > 6) {
+            penalty += averageCost * (newYearsDayLondon - 6);
+        }
+        if (boxingDayManchester > 4) {
+            penalty += averageCost * (boxingDayManchester - 4);
+        }
+        if (newYearsDayManchester > 4) {
+            penalty += averageCost * (newYearsDayManchester - 4);
+        }
+        if (bdPremLondon > 3) {
+            penalty += averageCost * (bdPremLondon - 3);
+        }
+        if (nyPremLondon > 3) {
+            penalty += averageCost * (nyPremLondon - 3);
+        }
         cost = total;
         adjustedCost = total + penalty;
         return total;
     }
+    
 
     public void merge(Team team1, Team team2, Division division) {
 
@@ -344,7 +419,6 @@ public class Problem {
         Team[] schedule = division.getSchedule();
         Cycle[] cycles = division.getCycles();
         double[][] distances = division.getDistances();
-
         Team team3 = schedule[team1.getNextTeam()];
         Team team4 = schedule[team2.getNextTeam()];
         int team1Position = team1.getCyclePosition();
@@ -387,12 +461,20 @@ public class Problem {
     public void reverseCycle(Cycle cycle, Division division) {
         Team[] schedule = division.getSchedule();
         int cycleLength = cycle.getCycleSize();
-        Team currentTeam = cycle.getTeams().get(0);
+        //Team currentTeam = cycle.getTeams().get(0);
         for (int i = 0; i < cycleLength; i++) {
+            Team currentTeam = cycle.getTeams().get(i);
             int temp = currentTeam.getNextTeam();
             currentTeam.setNextTeam(currentTeam.getPrevTeam());
             currentTeam.setPrevTeam(temp);
-            currentTeam = schedule[currentTeam.getPrevTeam()];
+
+        }
+        Team currentTeam = cycle.getTeams().get(0);
+        cycle.clearList();
+        for (int i = 0; i < cycleLength; i++) {
+            currentTeam.setCyclePosition(i);
+            cycle.addTeam(currentTeam);
+            currentTeam = schedule[currentTeam.getNextTeam()];
         }
     }
 
@@ -411,13 +493,26 @@ public class Problem {
             adjustedCycle.add(team);
         }
         cycle.setTeams(adjustedCycle);
+        Team currentTeam = cycle.getTeams().get(0);
+        for (int i = 0; i < cycleLength; i++) {
+            currentTeam.setCyclePosition(i);
+            currentTeam = schedule[currentTeam.getNextTeam()];
+        }
+
     }
 
     public boolean isRearrangeFeasible(Team team1, Team team2, Division division) {
         Boolean feasible = false;
+        Team team3 = division.getSchedule()[team1.getNextTeam()];
+        Team team4 = division.getSchedule()[team2.getNextTeam()];
         if (team1.getNextTeam() != team2.getTeamID() && team2.getNextTeam() != team1.getTeamID()
                 && team1 != team2) {
             feasible = true;
+        }
+        Fixture f1 = new Fixture(team1, team2);
+        Fixture f2 = new Fixture(team3, team4);
+        if (f1.isPaired() || f2.isPaired()) {
+            feasible = false;
         }
         return feasible;
     }
@@ -453,11 +548,29 @@ public class Problem {
                 && team1 != team2 && team1 != team4 && team2 != team3 && team3 != team4) {
             feasible = true;//check feasibility
         }
+        Fixture f1 = new Fixture(team1, team2);
+        Fixture f2 = new Fixture(team3, team4);
+        if (f1.isPaired() || f2.isPaired()) {
+            feasible = false;
+        }
         return feasible;
 
     }
 
-    
+    public boolean isMergeFeasible(Team team1, Team team2) {
+        Division d1 = divisions[team1.getDivision()];
+        Division d2 = divisions[team2.getDivision()];
+        boolean feasible = true;
+        Team team3 = d1.getSchedule()[team1.getNextTeam()];
+        Team team4 = d2.getSchedule()[(team2.getPrevTeam())];
+        Fixture f1 = new Fixture(team1, team2);
+        Fixture f2 = new Fixture(team3, team4);
+
+        if (f1.isPaired() || f2.isPaired()) {
+            feasible = false;
+        }
+        return feasible;
+    }
 
     public double getMinCost() {
         double total = 0;
@@ -493,6 +606,8 @@ public class Problem {
         int clashes = 0;
         System.out.println("");
         System.out.println("Boxing Day");
+        String output = String.format("%30s%6s%30s%10s%15s%30s", "Home Team"," vs ","Away Team","Distance","Location", "Clash");
+        System.out.println(output);
         System.out.println("Premier League");
         for (int i = 0; i < boxingDay.length; i++) {
             if (i == 10) {
@@ -507,12 +622,18 @@ public class Problem {
                 System.out.println("");
                 System.out.println("League Two");
             }
-            System.out.print(boxingDay[i].toString());
-            if (boxingDay[i].isPaired() == true) {
-                System.out.print("----Clash");
-                clashes++;
+            Team homeTeam = boxingDay[i].getHomeTeam();
+            ArrayList<String> pairs = homeTeam.getPairs();
+            if(pairs.size()> 0){
+            for(int j=0;j<pairs.size();j++){
+                if(bdHomeTeamStrings.contains(pairs.get(j))){
+                    boxingDay[i].setClash(pairs.get(j));
+                    
+                }
             }
-            System.out.println("");
+            }
+            System.out.println(boxingDay[i].toString());
+
         }
         System.out.println("");
         System.out.println("");
@@ -531,18 +652,28 @@ public class Problem {
                 System.out.println("");
                 System.out.println("League Two");
             }
-            System.out.print(newYearsDay[i].toString());
-            if (newYearsDay[i].isPaired() == true) {
-                System.out.print("----Clash");
-                clashes++;
+            Team homeTeam = newYearsDay[i].getHomeTeam();
+            ArrayList<String> pairs = homeTeam.getPairs();
+            if(pairs.size()> 0){
+            for(int j=0;j<pairs.size();j++){
+                if(nyHomeTeamStrings.contains(pairs.get(j))){
+                    newYearsDay[i].setClash(pairs.get(j));
+                    
+                }
             }
-            System.out.println("");
+            }
+            System.out.println(newYearsDay[i].toString());
+            
         }
         System.out.println("");
         System.out.println("Final Cost: " + getCost());
         System.out.println("Min possible cost: " + getMinCost());
-        System.out.println("Clashes: " + clashes);
-
+        System.out.println("BD pair clashes: " + boxingDayClashes);
+        System.out.println("NY pair clashes: " + newYearsDayClashes);
+        System.out.println("BD London Teams: " + boxingDayLondon);
+        System.out.println("NY London Teams: " + newYearsDayLondon);
+        System.out.println("BD Manchester Teams: " + boxingDayManchester);
+        System.out.println("NY Manchester Teams: " + newYearsDayManchester);
     }
 
     /**
@@ -572,4 +703,5 @@ public class Problem {
     public void setAdjustedCost(double adjustedCost) {
         this.adjustedCost = adjustedCost;
     }
+
 }

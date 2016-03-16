@@ -26,11 +26,11 @@ public class Cycle {
         this.teams = new ArrayList<Team>();
         
     }
-    public Cycle(Cycle c){
+    public Cycle(Cycle c,Team[] s){
         cycleId = c.cycleId;
         teams = new ArrayList<>();
         for(int i=0;i<c.teams.size();i++){
-            Team team = new Team(c.teams.get(i));
+            Team team = s[c.teams.get(i).getTeamID()];
             teams.add(team);
         }
     }

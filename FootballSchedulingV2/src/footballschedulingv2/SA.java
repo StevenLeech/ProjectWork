@@ -45,7 +45,8 @@ public class SA {
     private void initStats() {
         rejected = positivelyAccepted = negativelyAccepted
                 = neutrallyAccepted = 0;
-        System.out.println(pproblem.getCost());
+        System.out.println("Cost "+pproblem.getCost());
+        System.out.println("w/penalty "+pproblem.getAdjustedCost());
     }
 
     private void displayStats(int step) {
@@ -96,11 +97,12 @@ public class SA {
 
     public void move() {
         Problem backup = new Problem(pproblem);
-        double cost = pproblem.getAdjustedCost();
+        double adjustedCost = pproblem.getAdjustedCost();
         double newCost = pproblem.modify();
-        if (metropolis(newCost - cost)) /* accepted */ {
-            if (newCost < pproblem.getBestCost()) {
-                pproblem.setBestCost(newCost);
+        double cost = pproblem.returnCost();
+        if (metropolis(newCost - adjustedCost)) /* accepted */ {
+            if (cost < pproblem.getBestCost()) {
+                pproblem.setBestCost(cost);
             }
         } else /*rejected */ {
             pproblem = backup;

@@ -42,7 +42,7 @@ Sunderland:Newcastle United:2
 Watford:Luton Town:2
 West Ham United:Leyton Orient:0
 Wigan Athletic:Oldham Athletic:1
-Wolverhampton Wanderers:West Bromich Albion,Wallsall:2
+Wolverhampton Wanderers:West Bromwich Albion,Wallsall:2
 
 Barnsley::2
 Blackpool:Preston North End:2
@@ -85,7 +85,7 @@ Mansfield Town:Nottingham Forest,Notts County:2
 Northampton Town::2
 Notts County:Mansfield Town,Nottingham Forest:2
 Oxford United:Reading:2
-Rochdale:Bury:2
+Rochdale:Bury:1
 Rushden & Diamonds::2
 Scunthorpe United:Lincoln City:2
 Shrewsbury Town::2

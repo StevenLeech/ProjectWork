@@ -22,7 +22,7 @@ public class Division {
         }
         cycles = new Cycle[d.cycles.length]; 
         for(int i=0;i<d.cycles.length;i++){
-            cycles[i]= new Cycle(d.cycles[i]);
+            cycles[i]= new Cycle(d.cycles[i],schedule);
         }
         distances = new double[d.distances.length][d.distances[0].length];
         for(int i=0;i<d.distances.length;i++){

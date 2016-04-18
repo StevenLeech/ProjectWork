@@ -1,0 +1,95 @@
+Arsenal
+Aston Villa
+Birmingham City
+Blackburn Rovers
+Bolton Wanderers
+Charlton Athletic
+Chelsea
+Crystal Palace
+Everton
+Fulham
+Liverpool
+Manchester City
+Manchester United
+Middlesbrough
+Newcastle United
+Norwich City
+Portsmouth
+Southampton
+Tottenham Hotspur
+West Bromwich Albion
+
+Brighton & Hove Albion
+Burnley
+Cardiff City
+Coventry City
+Crewe Alexandra
+Derby County
+Gillingham
+Ipswich Town
+Leeds United
+Leicester City
+Millwall
+Nottingham Forest
+Plymouth Argyle	
+Preston North End
+Queens Park Rangers
+Reading
+Rotherham United
+Sheffield United
+Stoke City
+Sunderland
+Watford
+West Ham United
+Wigan Athletic
+Wolverhampton Wanderers
+
+Barnsley
+Blackpool
+Bournemouth
+Bradford City
+Brentford
+Bristol City
+Chesterfield
+Colchester United
+Doncaster Rovers
+Hartlepool United
+Huddersfield Town
+Hull City
+Luton Town
+Milton Keynes Dons
+Oldham Athletic
+Peterborough United
+Port Vale
+Sheffield Wednesday
+Stockport County
+Swindon Town
+Torquay United
+Tranmere Rovers
+Walsall
+Wrexham
+
+Boston United
+Bristol Rovers
+Bury
+Cambridge United
+Cheltenham Town
+Chester FC
+Darlington
+Grimsby Town
+Kidderminster Harriers
+Leyton Orient
+Lincoln City
+Macclesfield Town
+Mansfield Town
+Northampton Town
+Notts County
+Oxford United
+Rochdale
+Rushden & Diamonds
+Scunthorpe United
+Shrewsbury Town
+Southend United
+Swansea City
+Wycombe Wanderers
+Yeovil Town

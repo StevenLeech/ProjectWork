@@ -15,23 +15,28 @@ public class RandGen {
     public RandGen(){
         
     }
+    
     public RandGen(double aseed){
         this.a = 62605;
         this.b = 113218009;
         this.m = 536870912;
         setSeed(aseed);
     }
+    
     public double getSeed(){
         return seed;
     }
+    
     public void setSeed(double aseed){
         this.seed = aseed;
         this.randomNumber = seed;
     }
+    
     public float myRand(){
         randomNumber = ((a*randomNumber + b) % m);
         return((float)(randomNumber/m));
     }
+    
     public int randInt(int x, int y){
         int z;
         float f;

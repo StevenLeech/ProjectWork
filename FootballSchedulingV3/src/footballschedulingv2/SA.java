@@ -26,6 +26,9 @@ public class SA {
     private int negativelyAccepted;
     private int neutrallyAccepted;
 
+    /**
+     * main constructor
+     */
     public SA(Problem problem1, RandGen rand1, double temperature1,
             int stepMax1, int nIter1, double rho1, double limitAcceptanceRatio1,
             double tolerance1, double infinity1, double exponentialLimit1) {
@@ -43,14 +46,19 @@ public class SA {
     }
 
    
-
+    /**
+     * method to print initial statistics
+     */
     private void initStats() {
         rejected = positivelyAccepted = negativelyAccepted
                 = neutrallyAccepted = 0;
         System.out.println("Cost " + pproblem.returnCost());
         System.out.println("w/penalty " + pproblem.getAdjustedCost());
     }
-
+    
+    /**
+     * method do display current statistics at the end of a step
+     */
     private void displayStats(int step) {
         System.out.println("Temperature step number : " + step);
         System.out.println("Temperature             : " + temperature);
@@ -66,7 +74,10 @@ public class SA {
         System.out.println("Proportion of non-zero cost moves that were accepted : "
                 + pcent);
     }
-
+    
+    /**
+     * method to decide whether or not to accept a move
+     */
     public boolean metropolis(double deltacost) {
         double epsilon;
         if (deltacost > infty) {
@@ -96,7 +107,10 @@ public class SA {
             return true;
         }
     }
-
+    
+    /**
+     * method to perform a move
+     */
     public void move() {
         Random rand = new Random();
         int selectDivision = rand.nextInt(4);
@@ -117,9 +131,15 @@ public class SA {
             pproblem = backup;
         }
     }
-
+    
+    /**
+     * method to start a simulation and run the program
+     */
     public double simulation() {
-
+        double costChange1=40;
+        double costChange2=50;
+        double costChange3=60;
+        double previousCost = 0;
         int iter;
         double acceptanceRatio = 1;
         for (int step = 1; ((step <= stepMax) && (acceptanceRatio > limitAcceptanceRatio)); step++) {
@@ -127,6 +147,13 @@ public class SA {
             for (iter = 1; iter <= nIter; iter++) {
                 move();
             }
+            costChange3 = Math.abs(costChange2);
+            costChange2 = Math.abs(costChange1);
+            costChange1 = Math.abs(pproblem.getAdjustedCost()- previousCost);
+            if(costChange1+costChange2+costChange3 <2 && costChange1+costChange2+costChange3>-2){
+                step = stepMax;
+            }
+            previousCost = pproblem.getAdjustedCost();
             displayStats(step);
             acceptanceRatio = (double) (positivelyAccepted + negativelyAccepted)
                     / (double) (positivelyAccepted + negativelyAccepted + rejected);
@@ -142,5 +169,12 @@ public class SA {
      */
     public void setBackup(Problem backup) {
         this.backup = backup;
+    }
+    
+    /**
+     * return the best problem found.
+     */
+    public Problem getProblem(){
+        return this.best;
     }
 }

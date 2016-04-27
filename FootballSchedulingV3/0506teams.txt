@@ -5,7 +5,6 @@ Blackburn Rovers:Burnley:2
 Bolton Wanderers:Stockport County:1
 Charlton Athletic:Millwall:0
 Chelsea:Fulham:0
-Crystal Palace::0
 Everton:Liverpool,Tranmere Rovers:2
 Fulham:Chelsea:0
 Liverpool:Everton,Tranmere Rovers:2
@@ -13,35 +12,36 @@ Manchester City:Manchester United:1
 Manchester United:Manchester City:1
 Middlesbrough:Hartlepool United:2
 Newcastle United:Sunderland:2
-Norwich City:Ipswich Town,Colchester United,Southend United:2
 Portsmouth:Southampton:2
-Southampton:Portsmouth:2
+Sunderland:Newcastle United:2
 Tottenham Hotspur:Arsenal:0
 West Bromwich Albion:Walsall,Wolverhampton Wanderers:2
+West Ham United:Leyton Orient:0
+Wigan Athletic:Oldham Athletic:1
 
 Brighton & Hove Albion::2
 Burnley:Blackburn:2
 Cardiff City:Swansea City:2
 Coventry City:Aston Villa,Birmingham City:2
 Crewe Alexandra:Macclesfield Town:2
+Crystal Palace::0
 Derby County:Chesterfield:2
-Gillingham::2
+Hull City:Grimsby Town:2
 Ipswich Town:Colchester United,Southend United,Norwich City:2
 Leeds United:Bradford City,Huddersfield Town:2
 Leicester City::2
+Luton Town:Watford:2
 Millwall:Charlton Athletic:0
-Nottingham Forest:Mansfield Town,Notts County:2
+Norwich City:Ipswich Town,Colchester United,Southend United:2
 Plymouth Argyle:Exeter City:2
 Preston North End:Blackpool:2
 Queens Park Rangers:Brentford:0
 Reading:Oxford United:2
-Rotherham United:Sheffield United,Sheffield Wednesday:2
 Sheffield United:Rotherham United,Sheffield Wednesday:2
+Sheffield Wednesday:Rotherham United,Sheffield United:2
+Southampton:Portsmouth:2
 Stoke City:Port Vale:2
-Sunderland:Newcastle United:2
 Watford:Luton Town:2
-West Ham United:Leyton Orient:0
-Wigan Athletic:Oldham Athletic:1
 Wolverhampton Wanderers:West Bromwich Albion,Walsall:2
 
 Barnsley::2
@@ -53,31 +53,31 @@ Bristol City:Bristol Rovers:2
 Chesterfield:Derby County:2
 Colchester United:Ipswich Town,Norwich City,Southend United:2
 Doncaster Rovers::2
+Gillingham::2
 Hartlepool United:Middlesbrough:2
 Huddersfield Town:Bradford City,Leeds United:2
-Hull City:Grimsby Town:2
-Luton Town:Watford:2
 Milton Keynes Dons::2
+Nottingham Forest:Mansfield Town,Notts County:2
 Oldham Athletic:Wigan Athletic:1
-Peterborough United:Cambridge United:2
 Port Vale:Stoke City:2
-Sheffield Wednesday:Rotherham United,Sheffield United:2
-Stockport County:Bolton Wanderers:1
+Rotherham United:Sheffield United,Sheffield Wednesday:2
+Scunthorpe United:Lincoln City:2
+Southend United:Norwich City,Ipswich Town,Colchester United:2
+Swansea City:Cardiff City:2
 Swindon Town::2
-Torquay United::2
 Tranmere Rovers:Everton,Liverpool:2
 Walsall:West Bromwich Albion,Wolverhampton Wanderers:2
-Wrexham: :2
+Yeovil Town::2
 
+Barnet::0
 Boston United::2
 Bristol Rovers:Bristol City:2
 Bury:Rochdale:1
-Cambridge United:Peterborough United:2
+Carlisle United::2
 Cheltenham Town::2
 Chester FC::2
 Darlington::2
 Grimsby Town:Hull City:2
-Kidderminster Harriers: :2
 Leyton Orient:West Ham:0
 Lincoln City:Scunthorpe United:2
 Macclesfield Town:Crewe Alexandra:2
@@ -85,11 +85,11 @@ Mansfield Town:Nottingham Forest,Notts County:2
 Northampton Town::2
 Notts County:Mansfield Town,Nottingham Forest:2
 Oxford United:Reading:2
+Peterborough United::2
 Rochdale:Bury:1
 Rushden & Diamonds::2
-Scunthorpe United:Lincoln City:2
 Shrewsbury Town::2
-Southend United:Norwich City,Ipswich Town,Colchester United:2
-Swansea City:Cardiff City:2
+Stockport County:Bolton Wanderers:1
+Torquay United::2
+Wrexham: :2
 Wycombe Wanderers::2
-Yeovil Town::2

@@ -28,7 +28,10 @@ public class Problem {
     int nyPremLondon = 0;
     ArrayList<String> bdHomeTeamStrings;
     ArrayList<String> nyHomeTeamStrings;
-
+    
+    /**
+     * Initial constructor
+     */
     public Problem(Division[] divisions) {
         this.divisions = divisions;
         setFixtures();
@@ -36,7 +39,10 @@ public class Problem {
         this.bestCost = adjustedCost;
         this.currentCycle = 0;
     }
-
+    
+    /**
+     * copy constructor
+     */
     public Problem(Problem p) {
         divisions = new Division[p.divisions.length];
         for (int i = 0; i < p.divisions.length; i++) {
@@ -63,7 +69,47 @@ public class Problem {
         }
         
     }
-
+    
+    /**
+     * constructor for full backup
+     */
+    public Problem (Division division, Problem p){
+        backup = new Division(division);
+        int id = backup.getId();
+        divisions = new Division[p.divisions.length];
+        for(int i=0;i<4;i++){
+            Division div = p.divisions[i];
+            if(i == id){
+                divisions[i] = backup;
+            }
+            else{
+                divisions[i]=div;
+            }
+        }
+        cost = p.cost;
+        bestCost = p.bestCost;
+        adjustedCost = p.adjustedCost;
+        currentCycle = p.currentCycle;
+        setFixtures();
+        boxingDayClashes = p.boxingDayClashes;
+        boxingDayLondon = p.boxingDayLondon;
+        boxingDayManchester = p.boxingDayManchester;
+        bdPremLondon = p.bdPremLondon;
+        newYearsDayClashes = p.newYearsDayClashes;
+        newYearsDayLondon = p.newYearsDayLondon;
+        newYearsDayManchester = p.newYearsDayManchester;
+        nyPremLondon = p.nyPremLondon;
+        bdHomeTeamStrings = new ArrayList<String>();
+        nyHomeTeamStrings = new ArrayList<String>();
+        for(int i=0;i<p.bdHomeTeamStrings.size();i++){
+            bdHomeTeamStrings.add(p.bdHomeTeamStrings.get(i));
+            nyHomeTeamStrings.add(p.nyHomeTeamStrings.get(i));
+        }
+    }
+    
+    /**
+     * method to get set of fixtures from cycles
+     */
     public void setFixtures() {
         int fixture = 0;
         for (int i = 0; i < getDivisions().length; i++) {
@@ -111,40 +157,9 @@ public class Problem {
         }
     }
     
-    public Problem (Division division, Problem p){
-        backup = new Division(division);
-        int id = backup.getId();
-        divisions = new Division[p.divisions.length];
-        for(int i=0;i<4;i++){
-            Division div = p.divisions[i];
-            if(i == id){
-                divisions[i] = backup;
-            }
-            else{
-                divisions[i]=div;
-            }
-        }
-        cost = p.cost;
-        bestCost = p.bestCost;
-        adjustedCost = p.adjustedCost;
-        currentCycle = p.currentCycle;
-        setFixtures();
-        boxingDayClashes = p.boxingDayClashes;
-        boxingDayLondon = p.boxingDayLondon;
-        boxingDayManchester = p.boxingDayManchester;
-        bdPremLondon = p.bdPremLondon;
-        newYearsDayClashes = p.newYearsDayClashes;
-        newYearsDayLondon = p.newYearsDayLondon;
-        newYearsDayManchester = p.newYearsDayManchester;
-        nyPremLondon = p.nyPremLondon;
-        bdHomeTeamStrings = new ArrayList<String>();
-        nyHomeTeamStrings = new ArrayList<String>();
-        for(int i=0;i<p.bdHomeTeamStrings.size();i++){
-            bdHomeTeamStrings.add(p.bdHomeTeamStrings.get(i));
-            nyHomeTeamStrings.add(p.nyHomeTeamStrings.get(i));
-        }
-    }
-
+    /**
+     * method to call transformations
+     */
     public double modify(Division division) {
         Random rand = new Random();
         Team[] teams = division.getSchedule();
@@ -245,11 +260,17 @@ public class Problem {
         adjustedCost = calculateAdjustedCost(costChange);
         return adjustedCost;
     }
-
+    
+    /**
+     * method to return cost of problem
+     */
     public double returnCost() {
         return this.cost;
     }
-
+    
+    /**
+     * method to calculate the current cost
+     */
     public double calculateCost() {
         double total = 0.0;
         for (int j = 0; j < getDivisions().length; j++) {
@@ -267,6 +288,9 @@ public class Problem {
         return adjustedCost;
     }
     
+    /**
+     * method to update clashes
+     */
     public void getClashes(){
         boxingDayClashes = 0;
         boxingDayLondon = 0;
@@ -329,6 +353,9 @@ public class Problem {
         
     }
     
+    /**
+     * method to calculate the penalty
+     */
     public double getPenalty(){
         double penalty = 0.0;
         getClashes();
@@ -360,12 +387,18 @@ public class Problem {
         return penalty;
     }
     
+    /**
+     * method to calculate cost + penalty
+     */
     public double calculateAdjustedCost(double costChange){
         cost = cost + costChange;
         adjustedCost = cost + getPenalty();
         return adjustedCost;
     }
-
+    
+    /**
+     * method to merge two cycles
+     */
     public double merge(Team team1, Team team2, Division division) {
         Team[] schedule = division.getSchedule();
         Cycle[] cycles = division.getCycles();
@@ -422,7 +455,10 @@ public class Problem {
         }
         return deltaCost;
     }
-
+    
+    /**
+     * method split a cycle
+     */
     public double split(Team team1, Team team2, Division division) {
         Team[] schedule = division.getSchedule();
         Cycle[] cycles = division.getCycles();
@@ -471,7 +507,10 @@ public class Problem {
         division.setHighestCycle(currentCycle);
         return deltaCost;
     }
-
+    
+    /**
+     * method to rearrange a cycle
+     */
     public double rearrange(Team team1, Team team2, Division division) {
         Team[] schedule = division.getSchedule();
         Cycle[] cycles = division.getCycles();
@@ -526,7 +565,10 @@ public class Problem {
         }
         return deltaCost;
     }
-
+    
+    /**
+     * method to reverse direction of a cycle
+     */
     public double reverseCycle(Cycle cycle, Division division) {
         Team[] schedule = division.getSchedule();
         int cycleLength = cycle.getCycleSize();
@@ -553,7 +595,10 @@ public class Problem {
         }
         return deltaCost;
     }
-
+    
+    /**
+     * method to adjust team positions in a cycle
+     */
     public void adjustDates(Cycle cycle, Division division) {
         Team[] schedule = division.getSchedule();
         int cycleLength = cycle.getCycleSize();
@@ -576,7 +621,10 @@ public class Problem {
         }
 
     }
-
+    
+    /**
+     * method to check if a rearrange transformation is feasible
+     */
     public boolean isRearrangeFeasible(Team team1, Team team2, Division division) {
         Boolean feasible = false;
         Team team3 = division.getSchedule()[team1.getNextTeam()];
@@ -592,7 +640,10 @@ public class Problem {
         }
         return feasible;
     }
-
+    
+    /**
+     * method to check if splitting a cycle is feasible
+     */
     public boolean isSplitFeasible(Team team1, Team team2, Division division) {
         Team[] schedule = division.getSchedule();
         Cycle[] cycles = division.getCycles();
@@ -632,7 +683,10 @@ public class Problem {
         return feasible;
 
     }
-
+    
+    /**
+     * method to check if a merge transformation if feasible
+     */
     public boolean isMergeFeasible(Team team1, Team team2) {
         Division d1 = getDivisions()[team1.getDivision()];
         Division d2 = getDivisions()[team2.getDivision()];
@@ -647,7 +701,10 @@ public class Problem {
         }
         return feasible;
     }
-
+    
+    /**
+     * method to calculate minimum potential cost (lowest cost for each team)
+     */
     public double getMinCost() {
         double total = 0;
         for (int i = 0; i < getDivisions().length; i++) {
@@ -677,7 +734,10 @@ public class Problem {
         }
         return total;
     }
-
+    
+    /**
+     * method to display final solution and cost
+     */
     public void checkAndDisplay() {
         int clashes = 0;
         System.out.println("");
@@ -762,26 +822,26 @@ public class Problem {
     public double getBestCost() {
         return bestCost;
     }
-
+    
     /**
      * @param bestCost the bestCost to set
      */
     public void setBestCost(double bestCost) {
         this.bestCost = bestCost;
     }
-
+    
     /**
      * @return the adjustedCost
      */
     public double getAdjustedCost() {
         return adjustedCost;
     }
-
+    
     /**
      * @return the divisions
      */
     public Division[] getDivisions() {
         return divisions;
     }
-
+    
 }

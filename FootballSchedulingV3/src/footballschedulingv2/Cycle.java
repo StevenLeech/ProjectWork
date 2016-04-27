@@ -25,6 +25,7 @@ public class Cycle {
         this.teams = new ArrayList<Team>();
         
     }
+    
     public Cycle(Cycle c,Team[] s){
         cycleId = c.cycleId;
         teams = new ArrayList<>();
@@ -33,7 +34,6 @@ public class Cycle {
             teams.add(team);
         }
     }
-    
 
     /**
      * @return the cycleId

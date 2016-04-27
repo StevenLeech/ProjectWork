@@ -10,13 +10,26 @@ import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class FootballSchedulingV2 {
-
     private static Division[] divisions = new Division[4];
-
-    public static void getData() throws FileNotFoundException, IOException {
-        FileReader fr = new FileReader("teamClashes.txt");
+    
+    /**
+     * get data from text files
+     */
+    public static void getData(int season) throws FileNotFoundException, IOException {
+        String teamFile = "";
+        String distanceFile = "";
+        if(season ==1){
+            teamFile = "teamClashes.txt";
+            distanceFile = "Distances.txt";
+        }
+        if(season ==2){
+            teamFile = "0506teams.txt";
+            distanceFile = "0506distances.txt";
+        }
+        FileReader fr = new FileReader(teamFile);
         BufferedReader br = new BufferedReader(fr);
         Cycle[] premCycles = new Cycle[6];
         Cycle[] champCycles = new Cycle[6];
@@ -124,6 +137,7 @@ public class FootballSchedulingV2 {
             String[] teamStrings = teamString.split(":");
             String teamName = teamStrings[0];
             String teamPairs = teamStrings[1];
+            
             int location = Integer.parseInt(teamStrings[2]);
             ArrayList<String> pairs = new ArrayList<String>();
             String[] paired = teamPairs.split(",");
@@ -143,7 +157,7 @@ public class FootballSchedulingV2 {
             lg2Cycles[0].addTeam(team);
             //System.out.println(teamName);
         }
-        fr = new FileReader("Distances.txt");
+        fr = new FileReader(distanceFile);
         br = new BufferedReader(fr);
 
         for (int i = 0; i < 20; i++) {
@@ -198,17 +212,99 @@ public class FootballSchedulingV2 {
          * @param args the command line arguments
          */
     }
-
+    
+    /**
+     * checks if string contains an integer
+     */
+    public static boolean isInteger( String input ) {
+    try {
+        Integer.parseInt( input );
+        return true;
+    }
+    catch( Exception e ) {
+        return false;
+    }
+}
+    
+    /**
+     * checks if a string contains a double
+     */
+    public static boolean isDouble( String input ) {
+    try {
+        Double.parseDouble( input );
+        return true;
+    }
+    catch( Exception e ) {
+        return false;
+    }
+}
+    
+    /**
+     * main method.
+     * creates objects and starts program.
+     */
     public static void main(String[] args) throws IOException {
         double total =0;
-        //for(int i=0; i<10;i++){
-        getData();
-        Problem problem = new Problem(divisions);
-        RandGen rgen = new RandGen(500.0);
-        rgen.setSeed(500.0);
-        SA mysa = new SA(problem, rgen, 300, 200, 30000, 0.95, 0.01, 1e-6, 1e10, -50);
-        total += mysa.simulation();
-       // }
-        //System.out.println("Average cost = "+ total/10);
+        double best= 5000000;
+        int runs = 1;
+        double temp = 300;
+        int iterations = 30000;
+        int season = 1;
+        double runtime = 10.0;
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Select a Season");
+        System.out.println("1. 04/05    2. 05/06     (Enter 1 or 2)");
+        String seas = scan.nextLine();
+        if(seas.equalsIgnoreCase("1") ||seas.equalsIgnoreCase("2")){
+            season = Integer.parseInt(seas);
+        }
+        String seasonStr = "";
+        if(season == 1){
+            seasonStr = "04/05";
+        }
+        if(season == 2){
+            seasonStr = "05/06";
+        }
+        System.out.println("Enter the stating temperature (default is 300)");
+        String tempS = scan.nextLine();
+        if(isDouble(tempS)){
+            temp = Double.parseDouble(tempS);
+        }
+        runtime += (((temp - 300)/100)*0.8);
+        System.out.println("Enter the number of Iterations per step (default is 30000)");
+        String iter = scan.nextLine();
+        if(isInteger(iter)){
+            iterations = Integer.parseInt(iter);
+        }
+        runtime = runtime * (iterations/3000);
+        int runMinutes = (int) runtime/60;
+        System.out.println("Estimated run-time per run is "+ runMinutes +" Minutes, "+ runtime%60 +" Seconds.");
+        System.out.println("Enter the number of runs (default is 1)");
+        String runStr = scan.nextLine();
+        if(isInteger(runStr)){
+            runs = Integer.parseInt(runStr);
+        }
+        System.out.println("Season: "+ seasonStr+ ", Temperature: "+ temp + ", Iterations: "+ iterations + ", Runs: "+ runs);
+        getData(season);
+        Problem bestp = new Problem(divisions);
+        System.out.println("-------------------------------------");
+        for(int i=0; i<runs;i++){
+            getData(season);
+            Problem problem = new Problem(divisions);
+            RandGen rgen = new RandGen(500.0);
+            rgen.setSeed(500.0);
+            SA mysa = new SA(problem, rgen, temp, 200, iterations, 0.95, 0.01, 1e-6, 1e10, -50);
+            double cost = mysa.simulation();
+            total+= cost;
+            if(cost<best){
+                best = cost;
+                bestp = mysa.getProblem();
+            
+            }
+        }
+        bestp.checkAndDisplay();
+        System.out.println("");
+        System.out.println("Average cost = "+ total/runs);
+        System.out.println("Best Cost = "+ best);
     }
 }

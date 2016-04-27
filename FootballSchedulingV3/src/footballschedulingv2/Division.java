@@ -42,33 +42,39 @@ public class Division {
     public Team[] getSchedule() {
         return schedule;
     }
+    
     /**
      * @return the cycles
      */
     public Cycle[] getCycles() {
         return cycles;
     }
+    
     /**
      * @return the distances
      */
     public double[][] getDistances() {
         return distances;
     }
+    
     /**
      * @return the highestCycle
      */
     public int getHighestCycle() {
         return highestCycle;
     }
+    
     /**
      * @return the divisionName
      */
     public void setHighestCycle(int a){
         highestCycle = a;
     }
+    
     public String getDivisionName() {
         return divisionName;
     }
+    
     /**
      * @return the id
      */
